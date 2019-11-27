@@ -17,9 +17,9 @@ kernel.GridSize = [ceil(im_height/block_height), ceil(im_width/block_width)];
 
 mask = [-0.112737 0 -0.112737; -0.274526 0 0.274526; -0.112737 0 0.112737];
 result = gpuArray(zeros(size(im)));
-result = feval(kernel,im,mask,result,im_height,im_width);
+result = feval(kernel, im, mask, result, im_width, im_height);
 
 figure;imshow(result,[])
 
 test = conv2(im,mask);
-figure;imshow(test,[]);
+figure;imshow(im,[]);
