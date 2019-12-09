@@ -11,8 +11,9 @@
 .address_size 64
 
 	// .globl	_Z8localCCLPKdPdii
-// _Z8localCCLPKdPdii$__cuda_local_var_19103_19_non_const_segments has been demoted
-.shared .align 4 .b8 _Z8localCCLPKdPdii$__cuda_local_var_19108_19_non_const_labels[1024];
+// _Z8localCCLPKdPdii$__cuda_local_var_19127_19_non_const_segments has been demoted
+// _Z8localCCLPKdPdii$__cuda_local_var_19132_19_non_const_labels has been demoted
+// _Z8localCCLPKdPdii$__cuda_local_var_19137_19_non_const_changed has been demoted
 
 .visible .entry _Z8localCCLPKdPdii(
 	.param .u64 _Z8localCCLPKdPdii_param_0,
@@ -21,57 +22,192 @@
 	.param .u32 _Z8localCCLPKdPdii_param_3
 )
 {
-	.reg .pred 	%p<11>;
-	.reg .b32 	%r<18>;
+	.reg .pred 	%p<22>;
+	.reg .b32 	%r<218>;
 	.reg .f64 	%fd<3>;
 	.reg .b64 	%rd<9>;
 	// demoted variable
-	.shared .align 4 .b8 _Z8localCCLPKdPdii$__cuda_local_var_19103_19_non_const_segments[1024];
+	.shared .align 4 .b8 _Z8localCCLPKdPdii$__cuda_local_var_19127_19_non_const_segments[1024];
+	// demoted variable
+	.shared .align 4 .b8 _Z8localCCLPKdPdii$__cuda_local_var_19132_19_non_const_labels[1024];
+	// demoted variable
+	.shared .align 4 .u32 _Z8localCCLPKdPdii$__cuda_local_var_19137_19_non_const_changed;
 
 	ld.param.u64 	%rd2, [_Z8localCCLPKdPdii_param_0];
 	ld.param.u64 	%rd1, [_Z8localCCLPKdPdii_param_1];
-	ld.param.u32 	%r3, [_Z8localCCLPKdPdii_param_2];
-	ld.param.u32 	%r4, [_Z8localCCLPKdPdii_param_3];
+	ld.param.u32 	%r21, [_Z8localCCLPKdPdii_param_2];
+	ld.param.u32 	%r22, [_Z8localCCLPKdPdii_param_3];
 	cvta.to.global.u64 	%rd3, %rd2;
-	mov.u32 	%r5, %ntid.y;
-	mov.u32 	%r6, %ctaid.y;
-	mov.u32 	%r7, %tid.y;
-	mad.lo.s32 	%r8, %r5, %r6, %r7;
-	mov.u32 	%r9, %ntid.x;
-	mov.u32 	%r10, %ctaid.x;
-	mov.u32 	%r11, %tid.x;
-	mad.lo.s32 	%r12, %r9, %r10, %r11;
-	mad.lo.s32 	%r13, %r7, %r5, %r11;
-	mad.lo.s32 	%r1, %r12, %r3, %r8;
-	mul.wide.s32 	%rd4, %r1, 8;
+	mov.u32 	%r23, %ntid.y;
+	mov.u32 	%r24, %ctaid.y;
+	mov.u32 	%r25, %tid.y;
+	mad.lo.s32 	%r26, %r23, %r24, %r25;
+	mov.u32 	%r27, %ntid.x;
+	mov.u32 	%r28, %ctaid.x;
+	mov.u32 	%r29, %tid.x;
+	mad.lo.s32 	%r30, %r27, %r28, %r29;
+	mad.lo.s32 	%r31, %r25, %r23, %r29;
+	mad.lo.s32 	%r32, %r30, %r21, %r26;
+	mul.wide.s32 	%rd4, %r32, 8;
 	add.s64 	%rd5, %rd3, %rd4;
 	ld.global.f64 	%fd1, [%rd5];
-	cvt.rzi.s32.f64	%r14, %fd1;
-	shl.b32 	%r15, %r13, 2;
-	mov.u32 	%r16, _Z8localCCLPKdPdii$__cuda_local_var_19103_19_non_const_segments;
-	add.s32 	%r17, %r16, %r15;
-	setp.eq.s32	%p1, %r11, 0;
-	setp.eq.s32	%p2, %r11, 15;
-	or.pred  	%p3, %p1, %p2;
-	setp.eq.s32	%p4, %r7, 0;
-	or.pred  	%p5, %p3, %p4;
-	setp.eq.s32	%p6, %r7, 15;
-	or.pred  	%p7, %p5, %p6;
-	selp.b32	%r2, 0, %r14, %p7;
-	st.shared.u32 	[%r17], %r2;
-	setp.lt.s32	%p8, %r12, %r4;
-	setp.lt.s32	%p9, %r8, %r3;
-	and.pred  	%p10, %p8, %p9;
-	@!%p10 bra 	BB0_2;
+	cvt.rzi.s32.f64	%r33, %fd1;
+	shl.b32 	%r34, %r31, 2;
+	mov.u32 	%r35, _Z8localCCLPKdPdii$__cuda_local_var_19127_19_non_const_segments;
+	add.s32 	%r36, %r35, %r34;
+	setp.ne.s32	%p2, %r29, 0;
+	setp.ne.s32	%p3, %r29, 15;
+	and.pred  	%p4, %p2, %p3;
+	setp.ne.s32	%p5, %r25, 0;
+	setp.ne.s32	%p6, %r25, 15;
+	and.pred  	%p7, %p4, %p5;
+	and.pred  	%p1, %p6, %p7;
+	selp.b32	%r37, %r33, 255, %p1;
+	st.shared.u32 	[%r36], %r37;
+	bar.sync 	0;
+	@!%p1 bra 	BB0_23;
 	bra.uni 	BB0_1;
 
 BB0_1:
-	cvta.to.global.u64 	%rd6, %rd1;
-	add.s64 	%rd8, %rd6, %rd4;
-	cvt.rn.f64.s32	%fd2, %r2;
-	st.global.f64 	[%rd8], %fd2;
+	add.s32 	%r41, %r25, 1;
+	mad.lo.s32 	%r42, %r23, %r41, %r29;
+	shl.b32 	%r43, %r42, 2;
+	add.s32 	%r2, %r35, %r43;
 
 BB0_2:
+	or.b32  	%r47, %r29, %r25;
+	mov.u32 	%r51, _Z8localCCLPKdPdii$__cuda_local_var_19132_19_non_const_labels;
+	add.s32 	%r52, %r51, %r34;
+	st.shared.u32 	[%r52], %r31;
+	setp.ne.s32	%p8, %r47, 0;
+	@%p8 bra 	BB0_4;
+
+	mov.u32 	%r53, 0;
+	st.shared.u32 	[_Z8localCCLPKdPdii$__cuda_local_var_19137_19_non_const_changed], %r53;
+
+BB0_4:
+	bar.sync 	0;
+	add.s32 	%r60, %r25, -1;
+	mad.lo.s32 	%r61, %r23, %r60, %r29;
+	shl.b32 	%r62, %r61, 2;
+	add.s32 	%r63, %r62, %r35;
+	ld.shared.u32 	%r64, [%r63+-4];
+	ld.shared.u32 	%r4, [%r36];
+	setp.ne.s32	%p9, %r4, %r64;
+	mov.u32 	%r211, %r31;
+	@%p9 bra 	BB0_6;
+
+	add.s32 	%r72, %r62, %r51;
+	mad.lo.s32 	%r73, %r25, %r23, %r29;
+	ld.shared.u32 	%r74, [%r72+-4];
+	min.s32 	%r211, %r73, %r74;
+
+BB0_6:
+	ld.shared.u32 	%r82, [%r36+-4];
+	setp.ne.s32	%p10, %r4, %r82;
+	@%p10 bra 	BB0_8;
+
+	mad.lo.s32 	%r86, %r25, %r23, %r29;
+	shl.b32 	%r87, %r86, 2;
+	add.s32 	%r89, %r51, %r87;
+	ld.shared.u32 	%r90, [%r89+-4];
+	min.s32 	%r211, %r211, %r90;
+
+BB0_8:
+	ld.shared.u32 	%r91, [%r2+-4];
+	setp.ne.s32	%p11, %r4, %r91;
+	@%p11 bra 	BB0_10;
+
+	add.s32 	%r99, %r51, %r43;
+	ld.shared.u32 	%r100, [%r99+-4];
+	min.s32 	%r211, %r211, %r100;
+
+BB0_10:
+	ld.shared.u32 	%r101, [%r2];
+	setp.ne.s32	%p12, %r4, %r101;
+	@%p12 bra 	BB0_12;
+
+	add.s32 	%r109, %r51, %r43;
+	ld.shared.u32 	%r110, [%r109];
+	min.s32 	%r211, %r211, %r110;
+
+BB0_12:
+	ld.shared.u32 	%r111, [%r2+4];
+	setp.ne.s32	%p13, %r4, %r111;
+	@%p13 bra 	BB0_14;
+
+	add.s32 	%r119, %r51, %r43;
+	ld.shared.u32 	%r120, [%r119+4];
+	min.s32 	%r211, %r211, %r120;
+
+BB0_14:
+	add.s32 	%r128, %r43, %r35;
+	shl.b32 	%r129, %r23, 2;
+	mov.u32 	%r130, 4;
+	sub.s32 	%r131, %r130, %r129;
+	add.s32 	%r132, %r128, %r131;
+	ld.shared.u32 	%r133, [%r132];
+	setp.ne.s32	%p14, %r4, %r133;
+	@%p14 bra 	BB0_16;
+
+	mad.lo.s32 	%r137, %r25, %r23, %r29;
+	shl.b32 	%r138, %r137, 2;
+	add.s32 	%r140, %r51, %r138;
+	ld.shared.u32 	%r141, [%r140+4];
+	min.s32 	%r211, %r211, %r141;
+
+BB0_16:
+	ld.shared.u32 	%r150, [%r63+4];
+	setp.ne.s32	%p15, %r4, %r150;
+	@%p15 bra 	BB0_18;
+
+	add.s32 	%r158, %r62, %r51;
+	ld.shared.u32 	%r159, [%r158+4];
+	min.s32 	%r211, %r211, %r159;
+
+BB0_18:
+	add.s32 	%r167, %r35, %r62;
+	ld.shared.u32 	%r168, [%r167];
+	setp.ne.s32	%p16, %r4, %r168;
+	@%p16 bra 	BB0_20;
+
+	add.s32 	%r176, %r51, %r62;
+	ld.shared.u32 	%r177, [%r176];
+	min.s32 	%r211, %r211, %r177;
+
+BB0_20:
+	bar.sync 	0;
+	setp.ge.s32	%p17, %r211, %r31;
+	@%p17 bra 	BB0_22;
+
+	mad.lo.s32 	%r181, %r25, %r23, %r29;
+	shl.b32 	%r182, %r181, 2;
+	add.s32 	%r184, %r51, %r182;
+	atom.shared.min.s32 	%r185, [%r184], %r211;
+	mov.u32 	%r186, 1;
+	st.shared.u32 	[_Z8localCCLPKdPdii$__cuda_local_var_19137_19_non_const_changed], %r186;
+
+BB0_22:
+	bar.sync 	0;
+	ld.shared.u32 	%r187, [_Z8localCCLPKdPdii$__cuda_local_var_19137_19_non_const_changed];
+	setp.ne.s32	%p18, %r187, 1;
+	@%p18 bra 	BB0_2;
+
+BB0_23:
+	setp.lt.s32	%p19, %r30, %r22;
+	setp.lt.s32	%p20, %r26, %r21;
+	and.pred  	%p21, %p19, %p20;
+	@!%p21 bra 	BB0_25;
+	bra.uni 	BB0_24;
+
+BB0_24:
+	ld.shared.u32 	%r203, [%r36];
+	cvt.rn.f64.s32	%fd2, %r203;
+	cvta.to.global.u64 	%rd6, %rd1;
+	add.s64 	%rd8, %rd6, %rd4;
+	st.global.f64 	[%rd8], %fd2;
+
+BB0_25:
 	ret;
 }
 

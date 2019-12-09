@@ -4,18 +4,20 @@ kernel = parallel.gpu.CUDAKernel('kernel_one.ptx', 'kernel_one.cu');
 
 im = imread('peppers.png');
 im = rgb2gray(im);
+im = uint8(imbinarize(im) .* 255);
+imshow(im);
 
 im_height = size(im,1);
 im_width = size(im,2);
-dummy_img = zeros(im_height, im_width);
+% dummy_img = zeros(im_height, im_width);
 
-for row = 1:im_height
+% for row = 1:im_height
 
-    for col = 1:im_width
+%     for col = 1:im_width
         
-        dummy_img(row, col) = row-1 + (col-1)*im_height;
-    end
-end
+%         dummy_img(row, col) = row-1 + (col-1)*im_height;
+%     end
+% end
 
 block_width = 16;
 block_height = 16;
