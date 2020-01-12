@@ -9,7 +9,7 @@ __device__ bool inLocalBorder();
 __device__ int findRoot(int equivalenceMatrix[], int elementIndex);
 
 
-__global__ void localCCL(const double* input, double* output, const int height, const int width){
+__global__ void localCCL(const double* input, int* output, const int height, const int width){
 
     __shared__ int segments[BLOCK_WIDTH * BLOCK_HEIGHT];
     __shared__ int labels[BLOCK_WIDTH * BLOCK_HEIGHT];
@@ -17,9 +17,9 @@ __global__ void localCCL(const double* input, double* output, const int height, 
     
     int row = blockIdx.y*blockDim.y + threadIdx.y;
     int col = blockIdx.x*blockDim.x + threadIdx.x;
-    int localRow = threadIdx.x;
-    int localCol = threadIdx.y;
-    int localIndex = localCol * blockDim.y + localRow;
+    int localRow = threadIdx.y;
+    int localCol = threadIdx.x;
+    int localIndex = localRow * blockDim.y + localCol;
     int globalIndex = col * height + row;
     int newLabel;
     int nType = NEIGH_EIGHT;
@@ -126,4 +126,5 @@ __device__ int findRoot(int equivalenceMatrix[], int elementIndex){
 
     if(inLocalBorder())
         equivalenceMatrix[elementIndex] = 255;
+    return 0;
 }
