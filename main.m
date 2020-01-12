@@ -1,6 +1,7 @@
 clear all
 close all
-kernel = parallel.gpu.CUDAKernel('kernel_one.ptx', 'kernel_one.cu');
+kernel_1 = parallel.gpu.CUDAKernel('kernel_one.ptx', 'kernel_one.cu');
+kernel_2 = parallel.gpu.CUDAKernel('kernel_two.ptx', 'kernel_two.cu');
 
 im = imread('peppers.png');
 im = rgb2gray(im);
@@ -21,9 +22,12 @@ im_width = size(im,2);
 
 block_width = 16;
 block_height = 16;
-kernel.ThreadBlockSize = [block_width, block_height];
-kernel.GridSize = [ceil(im_width/block_width), ceil(im_height/block_height)];
+kernel_1.ThreadBlockSize = [block_width, block_height];
+kernel_1.GridSize = [ceil(im_width/block_width), ceil(im_height/block_height)];
 
 result = zeros(size(im));
-result = feval(kernel, im, result, im_height, im_width);
+result = feval(kernel_1, im, result, im_height, im_width);
 result = gather(result);
+
+%result = feval(kernel_2, im, result, im_height, im_width);
+%result = gather(result);
