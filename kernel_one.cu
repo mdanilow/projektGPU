@@ -10,7 +10,7 @@ __device__ int findRoot(int equivalenceMatrix[], int elementIndex);
 __device__ bool threadInImage(int height, int width);
 
 
-__global__ void localCCL(const double* input, double* output, double* debugArray, const int height, const int width){
+__global__ void localCCL(const double* input, double* output, const int height, const int width){
 
     __shared__ int segments[BLOCK_WIDTH * BLOCK_HEIGHT];
     __shared__ int labels[BLOCK_WIDTH * BLOCK_HEIGHT];
@@ -24,8 +24,6 @@ __global__ void localCCL(const double* input, double* output, double* debugArray
     int globalIndex = col * height + row;
     int newLabel;
     int nType = NEIGH_FOUR;
-    //const int DEBUG_GLOBAL_INDEX = 1538;
-    const int DEBUG_GLOBAL_INDEX = 0;
 
     // load corresponding image tile to shared memory
     segments[localIndex] = input[globalIndex];
@@ -39,8 +37,6 @@ __global__ void localCCL(const double* input, double* output, double* debugArray
     int label = localIndex;
     int neighboursIndexes[8];
     int numOfNeighbours;
-    int i = 0;
-
 
     if(threadInImage(height, width)){
 
@@ -79,8 +75,6 @@ __global__ void localCCL(const double* input, double* output, double* debugArray
     }
 
     output[globalIndex] = label;
-
-    debugArray[globalIndex] = labels[localIndex];
 }
 
 
