@@ -23,7 +23,7 @@ __global__ void localCCL(const double* input, double* output, double* debugArray
     int localIndex = localCol * blockDim.y + localRow;
     int globalIndex = col * height + row;
     int newLabel;
-    int nType = NEIGH_EIGHT;
+    int nType = NEIGH_FOUR;
     //const int DEBUG_GLOBAL_INDEX = 1538;
     const int DEBUG_GLOBAL_INDEX = 0;
 
@@ -45,11 +45,6 @@ __global__ void localCCL(const double* input, double* output, double* debugArray
     if(threadInImage(height, width)){
 
         while(1){
-        // for(int i = 0; i < 3; i++){
-
-            // i++;
-            // if(blockIdx.x == 0 && blockIdx.y == 0)
-            //     printf("localindex: %d, i: %d\n", localIndex, i);
 
             labels[localIndex] = label;
 
@@ -61,16 +56,10 @@ __global__ void localCCL(const double* input, double* output, double* debugArray
 
             numOfNeighbours = getNeighboursLocalIndexes(neighboursIndexes, nType);
             
-            // if(globalIndex == DEBUG_GLOBAL_INDEX){
-            //     printf("numOfNeighbours: %d\n", numOfNeighbours);
-            // }
-
-            for(int n = 0; n < numOfNeighbours; n++){
-                // if(globalIndex == DEBUG_GLOBAL_INDEX)
-                //     printf("neighbour[%d]: localIndex: %d, segment: %d\n", n, neighboursIndexes[n], segments[neighboursIndexes[n]]);
+            for(int n = 0; n < numOfNeighbours; n++)
                 if(segments[localIndex] == segments[neighboursIndexes[n]])
                     newLabel = min(newLabel, labels[neighboursIndexes[n]]);
-            }
+            
             __syncthreads();
 
             if(newLabel < label){
@@ -113,18 +102,61 @@ __device__ int getNeighboursLocalIndexes(int neighbours[], int nType){
                 length = 2;
             }
 
+            else if(localCol == BLOCK_HEIGHT - 1){
+
+                neighbours[0] = getLocalIndex(localRow, localCol - 1);
+                neighbours[1] = getLocalIndex(localRow + 1, localCol);
+                length = 2; 
+            }
+
+            else{
+
+                neighbours[0] = getLocalIndex(localRow, localCol - 1);
+                neighbours[1] = getLocalIndex(localRow, localCol + 1);
+                neighbours[3] = getLocalIndex(localRow + 1, localCol);
+                length = 3;
+            }
         }
 
         else if(localRow == BLOCK_HEIGHT-1){
 
+            if(localCol == 0){
+
+                neighbours[0] = getLocalIndex(localRow, localCol + 1);
+                neighbours[1] = getLocalIndex(localRow - 1, localCol);
+                length = 2;
+            }
+
+            else if(localCol == BLOCK_HEIGHT - 1){
+
+                neighbours[0] = getLocalIndex(localRow, localCol - 1);
+                neighbours[1] = getLocalIndex(localRow - 1, localCol);
+                length = 2; 
+            }
+
+            else{
+
+                neighbours[0] = getLocalIndex(localRow, localCol - 1);
+                neighbours[1] = getLocalIndex(localRow, localCol + 1);
+                neighbours[2] = getLocalIndex(localRow - 1, localCol);
+                length = 3;
+            }
         }
 
         else if(localCol == 0){
 
+            neighbours[0] = getLocalIndex(localRow - 1, localCol);
+            neighbours[1] = getLocalIndex(localRow, localCol + 1);
+            neighbours[2] = getLocalIndex(localRow + 1, localCol);
+            length = 3;
         }
 
         else if(localCol == BLOCK_WIDTH-1){
 
+            neighbours[0] = getLocalIndex(localRow - 1, localCol);
+            neighbours[1] = getLocalIndex(localRow, localCol - 1);
+            neighbours[2] = getLocalIndex(localRow + 1, localCol);
+            length = 3;
         }
 
         else{
@@ -136,6 +168,7 @@ __device__ int getNeighboursLocalIndexes(int neighbours[], int nType){
             length = 4;
         }
     }
+
 
     else if(nType == NEIGH_EIGHT){
 
