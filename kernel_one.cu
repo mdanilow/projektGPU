@@ -29,9 +29,9 @@ __global__ void localCCL(const double* input, double* output, const int height, 
     segments[localIndex] = input[globalIndex];
 
     // clear borders in every tile
-    if(inLocalBorder()){
-        segments[localIndex] = 0;
-    }
+    // if(inLocalBorder()){
+    //     segments[localIndex] = 0;
+    // }
 
     __syncthreads();
     int label = localIndex;
