@@ -15,6 +15,7 @@ im = imread('coins.png');
 im = imfill(im);
 im = int32(imbinarize(im) .* 255);
 [im, levels] = preprocessImage(im);
+figure();
 imshow(im, []);
 title('input image');
 
@@ -62,6 +63,7 @@ kernel_4.ThreadBlockSize = [TILE_SIZE, TILE_SIZE];
 kernel_4.GridSize = [ceil(im_width/TILE_SIZE), ceil(im_height/TILE_SIZE)];
 ker4_result = zeros(size(im));
 ker4_result = feval(kernel_4, ker2_result, ker4_result, im_height, im_width);
+ker4_result = gather(ker4_result);
 
 figure();
 imshow(ker4_result, []);
