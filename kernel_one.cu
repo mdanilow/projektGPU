@@ -8,6 +8,7 @@ __device__ int getLocalIndex(int localRow, int localCol);
 __device__ bool inLocalBorder();
 __device__ int findRoot(int equivalenceMatrix[], int elementIndex);
 __device__ bool threadInImage(int height, int width);
+__device__ int localAddrToGlobal(int label, int imHeight);
 
 
 __global__ void localCCL(const int* input, int* output, const int height, const int width){
@@ -74,10 +75,19 @@ __global__ void localCCL(const int* input, int* output, const int height, const 
         }
     }
 
-    output[globalIndex] = labels[localIndex];
+    output[globalIndex] = localAddrToGlobal(label, height);
 
     // if(input[globalIndex] == 0)
     //     output[globalIndex] = 0; 
+}
+
+
+__device__ int localAddrToGlobal(int label, int imHeight){
+
+    int row = blockIdx.y*blockDim.y + label/BLOCK_WIDTH;
+    int col = blockIdx.x*blockDim.x + label%16;
+    
+    return col * imHeight + row;
 }
 
 

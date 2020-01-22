@@ -34,25 +34,22 @@ __global__ void mergeTiles(
 
         //process the bottomhorizontal border
         //pixel coordinates
-        // x = subBlockX * BLOCK_WIDTH + threadIdx.z;
-        // y = (subBlockY+1) * BLOCK_WIDTH - 1;
+        x = subBlockX * BLOCK_WIDTH + threadIdx.z;
+        y = (subBlockY+1) * BLOCK_WIDTH - 1;
 
-        // if(!inLeftBorder())
-        //     Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x-1, y+1, height), &changed);
+        if(!inLeftBorder())
+            Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x-1, y+1, height), &changed);
 
-        // Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x, y+1, height), &changed);  
+        Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x, y+1, height), &changed);  
 
-        // if(!inRightBorder(width))
-        //     Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x+1, y+1, height), &changed);
+        if(!inRightBorder(width))
+            Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x+1, y+1, height), &changed);
 
 
         //process the right vertical border
         //pixel coordinates
         y = subBlockY * BLOCK_WIDTH + threadIdx.z;
         x = (subBlockX+1) * BLOCK_WIDTH - 1;
-
-        if(x == 143 && y == 7)
-            printf("%d", dLabelsData())
 
         if(!inTopBorder())
             Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x+1, y-1, height), &changed);
