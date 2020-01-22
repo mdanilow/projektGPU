@@ -1,9 +1,8 @@
-#define BLOCK_WIDTH 16
 
 __device__ bool inLeftBorder();
-__device__ bool inRightBorder(int imWidth);
+__device__ bool inRightBorder(int imWidth, int BLOCK_WIDTH);
 __device__ bool inTopBorder();
-__device__ bool inBottomBorder(int imHeight);
+__device__ bool inBottomBorder(int imHeight, int BLOCK_WIDTH);
 __device__ int globalAddr(const int x, const int y, const int height);
 __device__ int findRoot(int equivalenceArray[], int elementAddress);
 __device__ void Union(int equivalenceArray[], const int segmentsArray[], const int elementAddress0, const int elementAddress1, int* changedPtr);
@@ -13,7 +12,8 @@ __global__ void mergeTiles(
         const int* dSegData,
         int* dLabelsData,
         const int height,
-        const int width){
+        const int width,
+        const int BLOCK_WIDTH){
 
     __shared__ int changed; //shared memory used to check whether the solution is final or not
 
@@ -42,7 +42,7 @@ __global__ void mergeTiles(
 
         Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x, y+1, height), &changed);  
 
-        if(!inRightBorder(width))
+        if(!inRightBorder(width, BLOCK_WIDTH))
             Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x+1, y+1, height), &changed);
 
 
@@ -56,7 +56,7 @@ __global__ void mergeTiles(
 
         Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x+1, y, height), &changed);
 
-        if(!inBottomBorder(height))
+        if(!inBottomBorder(height, BLOCK_WIDTH))
             Union(dLabelsData, dSegData, globalAddr(x, y, height), globalAddr(x+1, y+1, height), &changed);
 
         __syncthreads();
@@ -72,7 +72,7 @@ __device__ bool inLeftBorder(){
     return (threadIdx.x == 0 && blockIdx.x == 0);
 }
 
-__device__ bool inRightBorder(int imWidth){
+__device__ bool inRightBorder(int imWidth, const int BLOCK_WIDTH){
 
     int subBlockX = blockIdx.x*blockDim.x + threadIdx.x;
     int x = subBlockX * BLOCK_WIDTH + threadIdx.z;
@@ -85,7 +85,7 @@ __device__ bool inTopBorder(){
     return (threadIdx.y == 0 && blockIdx.y == 0);
 }
 
-__device__ bool inBottomBorder(int imHeight){
+__device__ bool inBottomBorder(int imHeight, const int BLOCK_WIDTH){
 
     int subBlockY = blockIdx.y*blockDim.y + threadIdx.y;
     int y = subBlockY * BLOCK_WIDTH + threadIdx.z;
@@ -106,7 +106,7 @@ __device__ int findRoot(int equivalenceArray[], int elementAddress){
 
 __device__ void Union(int equivalenceArray[], const int segmentsArray[], const int elementAddress0, const int elementAddress1, int* changedPtr){
 
-    // if(segmentsArray[elementAddress0] == segmentsArray[elementAddress1]){
+    if(segmentsArray[elementAddress0] == segmentsArray[elementAddress1]){
 
         int root0 = findRoot(equivalenceArray, elementAddress0);
         int root1 = findRoot(equivalenceArray, elementAddress1);
@@ -119,5 +119,5 @@ __device__ void Union(int equivalenceArray[], const int segmentsArray[], const i
             atomicMin(equivalenceArray + root0, root1);
             *changedPtr = 1;
         }
-    // }
+    }
 }

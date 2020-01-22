@@ -34,6 +34,15 @@ function addr = to1DAddress(row, col, height)
 end
 
 
+function addr = union(equivalenceArray, elementAddress, elementAddress1)
+
+    root0 = findRoot(equivalenceArray, elementAddress0);
+    root1 = findRoot(equivalenceArray, elementAddress1);
+
+    if(root0 < root1)
+        equivalenceArray[root]
+end
+
 function [neighbours, quantity] = getNeighbours(row, col, img)
 
     width = size(img, 2);
