@@ -1,7 +1,7 @@
 close all;
 clear all;
 
-size = 256;
+size = 69;
 
 img = zeros(size, size, 3);
 
@@ -81,4 +81,4 @@ end
 figure();
 imshow(img);
 finalMat = img;
-imwrite(finalMat,['slimak', num2str(size),'.bmp'],'bmp');
+imwrite(finalMat,['../test_images/slimak', num2str(size),'.bmp'],'bmp');

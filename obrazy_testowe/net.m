@@ -1,7 +1,7 @@
 close all;
 clear all;
 
-size = 256;
+size = 1024;
 
 img = zeros(size, size, 3);
 %% siatka
@@ -14,4 +14,4 @@ end
 figure();
 imshow(img);
 finalMat = img;
-imwrite(finalMat,['siatka', num2str(size),'.bmp'],'bmp');
+imwrite(finalMat,['../test_images/siatka', num2str(size),'.bmp'],'bmp');

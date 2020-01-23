@@ -46,4 +46,4 @@ end
 figure();
 imshow(img);
 finalMat = img;
-imwrite(finalMat,['schody', num2str(size),'.bmp'],'bmp');
+imwrite(finalMat,['../test_images/schody', num2str(size),'.bmp'],'bmp');
